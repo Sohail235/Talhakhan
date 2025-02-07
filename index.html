@@ -6,66 +6,50 @@
     <title>Talha Khan</title>
     <style>
         body {
-            background-color: #000; /* Dark background */
-            color: #0f0; /* Green text */
-            font-family: monospace; /* Monospace font for hacking style */
-            overflow: hidden; /* Hide scrollbars initially */
+            background-color: #000;
+            color: #0f0;
+            font-family: monospace;
+            overflow: hidden; /* Hide scrollbars */
         }
 
         #banner {
             text-align: center;
             padding: 20px;
             font-size: 2em;
-            text-shadow: 0 0 10px #0f0; /* Glowing text */
+            text-shadow: 0 0 10px #0f0;
             margin-bottom: 20px;
+            position: relative; /* For positioning petals */
+            overflow: hidden; /* Hide overflowing petals */
+        }
+
+      .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-image: url("petal.png"); /* Replace with your petal image */
+            background-size: cover;
+            animation: falling 5s linear infinite; /* Adjust duration */
+            opacity: 0.7; /* Make petals slightly transparent */
+            z-index: 1; /* Place petals above banner text */
+            pointer-events: none; /* Make petals non-clickable */
+        }
+
+        @keyframes falling {
+            0% { top: -20px; opacity: 0; } /* Start above banner */
+            20% { opacity: 0.7;} /* Start visible */
+            100% { top: 100%; opacity: 0; } /* Fall below banner */
         }
 
         #container {
             display: grid;
-            grid-template-columns: repeat(8, 1fr); /* 8 columns */
+            grid-template-columns: repeat(5, 1fr); /* 5 columns */
             grid-gap: 10px;
             padding: 20px;
             width: 90%;
             margin: 0 auto;
         }
 
-      .box {
-            background-color: #111; /* Darker box background */
-            border: 2px solid transparent;
-            animation: glowing-border 2s linear infinite, glowing-text 2s linear infinite; /* Combined animations */
-            padding: 20px;
-            text-align: center;
-            cursor: pointer; /* Make boxes clickable */
-            overflow: hidden; /* Hide text overflow */
-            position: relative; /* For positioning "I LOVE YOU" message */
-        }
-      .box span{
-            color: #0f0;
-            text-shadow: 0 0 10px #0f0;
-        }
-
-        @keyframes glowing-border {
-            0% { border-color: #0f0; }
-            50% { border-color: #00ff00; } /* Slightly brighter green */
-            100% { border-color: #0f0; }
-        }
-
-        @keyframes glowing-text {
-            0% { text-shadow: 0 0 10px #0f0; }
-            50% { text-shadow: 0 0 15px #00ff00; }
-            100% { text-shadow: 0 0 10px #0f0; }
-        }
-
-      .message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2em;
-            color: #0f0;
-            text-shadow: 0 0 10px #0f0;
-            display: none; /* Initially hidden */
-        }
+        /*... (rest of the CSS from the previous example)... */
     </style>
 </head>
 <body>
@@ -79,6 +63,16 @@
 
     <script>
         const container = document.getElementById('container');
+        const banner = document.getElementById('banner');
+
+        // Petal creation
+        for (let i = 0; i < 50; i++) { // Adjust number of petals
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            petal.style.left = Math.random() * banner.offsetWidth + 'px'; // Random horizontal position
+            petal.style.animationDelay = Math.random() * 5 + 's'; // Random start delay
+            banner.appendChild(petal);
+        }
 
         for (let i = 0; i < 40; i++) {
             const box = document.createElement('div');
@@ -87,10 +81,10 @@
 
             box.addEventListener('click', () => {
                 const message = box.querySelector('.message');
-                message.style.display = 'block'; // Show message
+                message.style.display = 'block';
                 setTimeout(() => {
-                    message.style.display = 'none'; // Hide after a delay
-                }, 2000); // 2-second delay
+                    message.style.display = 'none';
+                }, 2000);
             });
 
             container.appendChild(box);
